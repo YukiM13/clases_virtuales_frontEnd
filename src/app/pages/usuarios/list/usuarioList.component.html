@@ -1,0 +1,76 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4>Gestión de Usuario</h4>
+            
+            <!-- Pestañas (Tabs) -->
+            <div class="flex mb-4">
+                <button 
+                    class="p-button p-component mr-2"
+                    [class.p-button-outlined]="activeTab !== 'alumnos'"
+                    (click)="setActiveTab('alumnos')">
+                    <span class="p-button-label">Alumnos</span>
+                </button>
+                <button 
+                    class="p-button p-component"
+                    [class.p-button-outlined]="activeTab !== 'docentes'"
+                    (click)="setActiveTab('docentes')">
+                    <span class="p-button-label">Docentes</span>
+                </button>
+            </div>
+
+            <!-- Contador de usuarios -->
+            <div class="mb-3">
+                <p class="text-600">
+                    Total de {{ activeTab }}: {{ usuariosFiltrados.length }}
+                </p>
+            </div>
+
+            <!-- Mensaje cuando no hay usuarios -->
+            <div *ngIf="usuariosFiltrados.length === 0" class="text-center p-4">
+                <i class="pi pi-info-circle text-4xl text-blue-500 mb-3"></i>
+                <p class="text-600">No se encontraron {{ activeTab }}</p>
+            </div>
+
+            <!-- Grid de Cards de Usuarios -->
+            <div class="grid" *ngIf="usuariosFiltrados.length > 0">
+                <div 
+                    *ngFor="let usuario of usuariosFiltrados" 
+                    class="col-12 md:col-6 lg:col-4">
+                    <div class="card mb-3 hover:shadow-3 transition-all transition-duration-300">
+                        
+                        <!-- Avatar/Imagen -->
+                        <div class="text-center mb-3">
+                            <img 
+                                [src]="getImageUrl(usuario)" 
+                                [alt]="usuario.usua_Usuario"
+                                (error)="onImageError($event)"
+                                class="w-6rem h-6rem border-circle shadow-2"
+                                style="object-fit: cover;">
+                        </div>
+
+                        <!-- Información del Usuario -->
+                        <div class="text-center">
+                            <!-- Nombre de Usuario -->
+                            <h6 class="mb-2 text-900">
+                                {{ usuario.usua_Usuario }}
+                            </h6>
+                            
+                            <!-- Nombre Completo -->
+                            <p class="text-600 mb-2">
+                                {{ getNombreCompleto(usuario) }}
+                            </p>
+
+                            <!-- Badge de Tipo -->
+                            <span 
+                                class="inline-flex align-items-center justify-content-center border-circle w-2rem h-2rem text-xs font-bold"
+                                [class]="usuario.usua_EsDocente === 1 ? 'bg-orange-100 text-orange-800' : 'bg-blue-100 text-blue-800'">
+                                {{ usuario.usua_EsDocente === 1 ? 'D' : 'A' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
